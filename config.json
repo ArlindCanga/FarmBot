@@ -1,0 +1,56 @@
+{
+  "server_name": "i-Longju v9",
+  "comment": "Indirizzi basati su Ghidra base 0x00400000. ToReal = ModuleBase + (addr - 0x00400000)",
+
+  "pointers": {
+    "player_base":   "0x0099d1fc",
+    "char_mgr":      "0x0099d200",
+    "net_stream":    "0x0099db3c",
+    "item_mgr":      "0x0099d20c",
+    "minimap":       "0x0099da04"
+  },
+
+  "offsets_player": {
+    "target_vid_read":  "0x16a68",
+    "target_vid_write": "0x9c",
+    "autofarm_flag":    "0x2c",
+    "attack_cooldown":  "0x16a68",
+    "attack_key":       "0xb0"
+  },
+
+  "offsets_netstream": {
+    "main_actor_vid": "0x98"
+  },
+
+  "offsets_instance": {
+    "race":  "0x184",
+    "pos_x": "0x680",
+    "pos_y": "0x684"
+  },
+
+  "offsets_charmap": {
+    "base":        "0x20",
+    "node_left":   "0x00",
+    "node_parent": "0x04",
+    "node_right":  "0x08",
+    "node_key":    "0x10",
+    "node_value":  "0x14"
+  },
+
+  "race_ranges": {
+    "mob_min":   100,
+    "mob_max":   7999,
+    "metin_min": 8000
+  },
+
+  "functions": {
+    "send_attack_packet": "0x00593630",
+    "call_auto_hunt":     "0x00583D70",
+    "move_to_position":   "0x004aea30",
+    "select_item":        "0x00650920"
+  },
+
+  "items": {
+    "bravery_cape_vnum": 70038
+  }
+}
