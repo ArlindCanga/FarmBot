@@ -23,6 +23,8 @@ x86/
 *.lib
 *.dll
 *.exe
+out/
+build/
 
 # Precompiled headers
 *.pch
