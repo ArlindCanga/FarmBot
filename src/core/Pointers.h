@@ -34,6 +34,7 @@ constexpr uintptr_t GHIDRA_BASE = 0x00400000;
 #define RACE_MOB_MIN                ConfigLoader::cfg.RACE_MOB_MIN
 #define RACE_MOB_MAX                ConfigLoader::cfg.RACE_MOB_MAX
 #define RACE_METIN_MIN              ConfigLoader::cfg.RACE_METIN_MIN
+#define RACE_METIN_MAX              ConfigLoader::cfg.RACE_METIN_MAX
 
 #define FN_SEND_ATTACK_PACKET       ConfigLoader::cfg.FN_SEND_ATTACK_PACKET
 #define FN_CALL_AUTO_HUNT           ConfigLoader::cfg.FN_CALL_AUTO_HUNT

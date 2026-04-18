@@ -5,6 +5,7 @@
 #include "../core/GameBase.h"
 #include "../core/EntityList.h"
 #include "../core/Pointers.h"
+#include "../Config.h"
 
 namespace WaitHack {
 
@@ -41,7 +42,10 @@ namespace WaitHack {
     inline void AttackAllNearby(uintptr_t charMgr, float px, float py,
         float radius, int delayMs) {
         detail::s_delayMs = delayMs;
-        EntityList::ForEachMobNearby(charMgr, px, py, radius, detail::AttackCallback);
+        if (g_config.whAttackMob)
+            EntityList::ForEachMobNearby(charMgr, px, py, radius, detail::AttackCallback);
+        if (g_config.whAttackMetin)
+            EntityList::ForEachMetinNearby(charMgr, px, py, radius, detail::AttackCallback);
     }
 
 } // namespace WaitHack

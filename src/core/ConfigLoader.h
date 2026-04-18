@@ -12,45 +12,49 @@ namespace ConfigLoader {
     // Struttura con tutti i valori caricati
     struct Config {
         // Pointers
-        uintptr_t PTR_PLAYER_BASE   = 0x0099d1fc;
-        uintptr_t PTR_CHAR_MGR      = 0x0099d200;
-        uintptr_t PTR_NET_STREAM    = 0x0099db3c;
-        uintptr_t PTR_ITEM_MGR      = 0x0099d20c;
-        uintptr_t PTR_MINIMAP       = 0x0099da04;
+        uintptr_t PTR_PLAYER_BASE = 0x0099d1fc;
+        uintptr_t PTR_CHAR_MGR = 0x0099d200;
+        uintptr_t PTR_NET_STREAM = 0x0099db3c;
+        uintptr_t PTR_ITEM_MGR = 0x0099d20c;
+        uintptr_t PTR_MINIMAP = 0x0099da04;
 
         // Offsets player
-        uintptr_t OFF_TARGET_VID_READ  = 0x16a68;
+        uintptr_t OFF_TARGET_VID_READ = 0x16a68;
         uintptr_t OFF_TARGET_VID_WRITE = 0x9c;
-        uintptr_t OFF_AUTOFARM_FLAG    = 0x2c;
-        uintptr_t OFF_ATTACK_COOLDOWN  = 0x16a68;
-        uintptr_t OFF_ATTACK_KEY       = 0xb0;
+        uintptr_t OFF_AUTOFARM_FLAG = 0x2c;
+        uintptr_t OFF_ATTACK_COOLDOWN = 0x16a68;
+        uintptr_t OFF_ATTACK_KEY = 0xb0;
 
         // Offsets netstream
         uintptr_t OFF_MAIN_ACTOR_VID = 0x98;
 
         // Offsets instance
-        uintptr_t OFF_INST_RACE  = 0x184;
+        uintptr_t OFF_INST_RACE = 0x184;
         uintptr_t OFF_INST_POS_X = 0x680;
         uintptr_t OFF_INST_POS_Y = 0x684;
+        uintptr_t OFF_INST_DEST_POS = 0x524;  // float[3] destinazione movimento
+        uintptr_t OFF_INST_MOVING = 0x1a4;  // byte flag "sto muovendo"
 
         // Offsets charmap
-        uintptr_t OFF_CHARMAP_BASE   = 0x20;
-        uintptr_t OFF_NODE_LEFT      = 0x00;
-        uintptr_t OFF_NODE_PARENT    = 0x04;
-        uintptr_t OFF_NODE_RIGHT     = 0x08;
-        uintptr_t OFF_NODE_KEY       = 0x10;
-        uintptr_t OFF_NODE_VALUE     = 0x14;
+        uintptr_t OFF_CHARMAP_BASE = 0x20;
+        uintptr_t OFF_NODE_LEFT = 0x00;
+        uintptr_t OFF_NODE_PARENT = 0x04;
+        uintptr_t OFF_NODE_RIGHT = 0x08;
+        uintptr_t OFF_NODE_KEY = 0x10;
+        uintptr_t OFF_NODE_VALUE = 0x14;
 
         // Race ranges
-        uint32_t RACE_MOB_MIN   = 100;
-        uint32_t RACE_MOB_MAX   = 7999;
+        uint32_t RACE_MOB_MIN = 100;
+        uint32_t RACE_MOB_MAX = 7999;
         uint32_t RACE_METIN_MIN = 8000;
+        uint32_t RACE_METIN_MAX = 9999;
 
         // Functions
         uintptr_t FN_SEND_ATTACK_PACKET = 0x00593630;
-        uintptr_t FN_CALL_AUTO_HUNT     = 0x00583D70;
-        uintptr_t FN_MOVE_TO_POSITION   = 0x004aea30;
-        uintptr_t FN_SELECT_ITEM        = 0x00650920;
+        uintptr_t FN_CALL_AUTO_HUNT = 0x00583D70;
+        uintptr_t FN_MOVE_TO_POSITION = 0x004ae8f0;  // __thiscall(inst, float* dest, float angle)
+        uintptr_t FN_MOVE_TO_POSITION_V2 = 0x004aea30;  // __cdecl(float* dest) — wrapper
+        uintptr_t FN_SELECT_ITEM = 0x00650920;
 
         // Items
         uint32_t BRAVERY_CAPE_VNUM = 70038;
@@ -96,7 +100,8 @@ namespace ConfigLoader {
             size_t end = json.find('"', pos);
             if (end == std::string::npos) return "";
             return json.substr(pos, end - pos);
-        } else {
+        }
+        else {
             // Valore numerico
             size_t end = pos;
             while (end < json.size() && json[end] != ',' && json[end] != '\n' && json[end] != '}')
@@ -123,7 +128,8 @@ namespace ConfigLoader {
 
         if (path) {
             strcpy_s(dllPath, path);
-        } else {
+        }
+        else {
             // Trova la cartella della DLL
             HMODULE hMod = nullptr;
             GetModuleHandleExA(
@@ -146,45 +152,48 @@ namespace ConfigLoader {
         auto r = [&](const std::string& k) { return ParseHex(GetJsonValue(json, k)); };
         auto ri = [&](const std::string& k) { return (uint32_t)ParseHex(GetJsonValue(json, k)); };
 
-        if (auto v = r("player_base"))      cfg.PTR_PLAYER_BASE   = v;
-        if (auto v = r("char_mgr"))         cfg.PTR_CHAR_MGR      = v;
-        if (auto v = r("net_stream"))       cfg.PTR_NET_STREAM    = v;
-        if (auto v = r("item_mgr"))         cfg.PTR_ITEM_MGR      = v;
-        if (auto v = r("minimap"))          cfg.PTR_MINIMAP       = v;
+        if (auto v = r("player_base"))      cfg.PTR_PLAYER_BASE = v;
+        if (auto v = r("char_mgr"))         cfg.PTR_CHAR_MGR = v;
+        if (auto v = r("net_stream"))       cfg.PTR_NET_STREAM = v;
+        if (auto v = r("item_mgr"))         cfg.PTR_ITEM_MGR = v;
+        if (auto v = r("minimap"))          cfg.PTR_MINIMAP = v;
 
         // Offsets player
-        if (auto v = r("target_vid_read"))  cfg.OFF_TARGET_VID_READ  = v;
+        if (auto v = r("target_vid_read"))  cfg.OFF_TARGET_VID_READ = v;
         if (auto v = r("target_vid_write")) cfg.OFF_TARGET_VID_WRITE = v;
-        if (auto v = r("autofarm_flag"))    cfg.OFF_AUTOFARM_FLAG    = v;
-        if (auto v = r("attack_cooldown"))  cfg.OFF_ATTACK_COOLDOWN  = v;
-        if (auto v = r("attack_key"))       cfg.OFF_ATTACK_KEY       = v;
+        if (auto v = r("autofarm_flag"))    cfg.OFF_AUTOFARM_FLAG = v;
+        if (auto v = r("attack_cooldown"))  cfg.OFF_ATTACK_COOLDOWN = v;
+        if (auto v = r("attack_key"))       cfg.OFF_ATTACK_KEY = v;
 
         // Offsets netstream
         if (auto v = r("main_actor_vid"))   cfg.OFF_MAIN_ACTOR_VID = v;
 
         // Offsets instance
-        if (auto v = r("race"))             cfg.OFF_INST_RACE  = v;
+        if (auto v = r("race"))             cfg.OFF_INST_RACE = v;
         if (auto v = r("pos_x"))            cfg.OFF_INST_POS_X = v;
         if (auto v = r("pos_y"))            cfg.OFF_INST_POS_Y = v;
+        if (auto v = r("dest_pos"))         cfg.OFF_INST_DEST_POS = v;
+        if (auto v = r("moving"))           cfg.OFF_INST_MOVING = v;
 
         // Offsets charmap
         if (auto v = r("base"))             cfg.OFF_CHARMAP_BASE = v;
-        if (auto v = r("node_left"))        cfg.OFF_NODE_LEFT    = v;
-        if (auto v = r("node_parent"))      cfg.OFF_NODE_PARENT  = v;
-        if (auto v = r("node_right"))       cfg.OFF_NODE_RIGHT   = v;
-        if (auto v = r("node_key"))         cfg.OFF_NODE_KEY     = v;
-        if (auto v = r("node_value"))       cfg.OFF_NODE_VALUE   = v;
+        if (auto v = r("node_left"))        cfg.OFF_NODE_LEFT = v;
+        if (auto v = r("node_parent"))      cfg.OFF_NODE_PARENT = v;
+        if (auto v = r("node_right"))       cfg.OFF_NODE_RIGHT = v;
+        if (auto v = r("node_key"))         cfg.OFF_NODE_KEY = v;
+        if (auto v = r("node_value"))       cfg.OFF_NODE_VALUE = v;
 
         // Race ranges
-        if (auto v = ri("mob_min"))         cfg.RACE_MOB_MIN   = v;
-        if (auto v = ri("mob_max"))         cfg.RACE_MOB_MAX   = v;
+        if (auto v = ri("mob_min"))         cfg.RACE_MOB_MIN = v;
+        if (auto v = ri("mob_max"))         cfg.RACE_MOB_MAX = v;
         if (auto v = ri("metin_min"))       cfg.RACE_METIN_MIN = v;
 
         // Functions
-        if (auto v = r("send_attack_packet")) cfg.FN_SEND_ATTACK_PACKET = v;
-        if (auto v = r("call_auto_hunt"))     cfg.FN_CALL_AUTO_HUNT     = v;
-        if (auto v = r("move_to_position"))   cfg.FN_MOVE_TO_POSITION   = v;
-        if (auto v = r("select_item"))        cfg.FN_SELECT_ITEM        = v;
+        if (auto v = r("send_attack_packet"))  cfg.FN_SEND_ATTACK_PACKET = v;
+        if (auto v = r("call_auto_hunt"))      cfg.FN_CALL_AUTO_HUNT = v;
+        if (auto v = r("move_to_position"))    cfg.FN_MOVE_TO_POSITION = v;
+        if (auto v = r("move_to_position_v2")) cfg.FN_MOVE_TO_POSITION_V2 = v;
+        if (auto v = r("select_item"))         cfg.FN_SELECT_ITEM = v;
 
         // Items
         if (auto v = ri("bravery_cape_vnum")) cfg.BRAVERY_CAPE_VNUM = v;

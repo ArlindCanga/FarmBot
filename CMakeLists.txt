@@ -9,7 +9,7 @@ file(GLOB_RECURSE SOURCES
     "src/*.h"
 )
 
-add_library(FarmBot SHARED ${SOURCES})
+add_library(FarmBot SHARED ${SOURCES} "src/features/MetinFarm.h")
 
 target_include_directories(FarmBot PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
